@@ -1,6 +1,11 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
+const cors = require("cors");
+
+// MIDDLEWARE
+app.use(cors());
+app.use(express.json());
 
 require("dotenv").config();
 
@@ -26,8 +31,16 @@ async function run() {
     const db = client.db("cleanlinessDB");
     const issuesCollection = db.collection("issues");
 
+    // ADD ISSUE API
+    app.post("/add-issue", async (req, res) => {
+      const newIssue = req.body;
+      const result = await issuesCollection.insertOne(newIssue);
+      res.send(result);
+    });
+
+    // LATEST ISSUES API
     app.get("/latest-issues", async (req, res) => {
-      const cursor = issuesCollection.find().limit(6);
+      const cursor = issuesCollection.find().limit(6).sort({ date: -1 });
       const result = await cursor.toArray();
       res.send(result);
     });
