@@ -38,6 +38,13 @@ async function run() {
       res.send(result);
     });
 
+    // ALL ISSUES API
+    app.get("/all-issues", async (req, res) => {
+      const cursor = issuesCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     // LATEST ISSUES API
     app.get("/latest-issues", async (req, res) => {
       const cursor = issuesCollection.find().limit(6).sort({ date: -1 });
