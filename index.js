@@ -9,9 +9,11 @@ app.use(express.json());
 
 require("dotenv").config();
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+// CONNECTING TO MONGODB
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@myfirstcluster.agauwwe.mongodb.net/?appName=MyFirstCluster`;
 
+// SERVER ENTYR POINT
 app.get("/", (req, res) => {
   res.send("Message From Server Home");
 });
@@ -50,6 +52,14 @@ async function run() {
       const cursor = issuesCollection.find().limit(6).sort({ date: -1 });
       const result = await cursor.toArray();
       res.send(result);
+    });
+
+    // Get Issue By Id
+    app.get("/issue/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await issuesCollection.findOne(query)
+      res.send(result)
     });
 
     // Send a ping to confirm a successful connection
