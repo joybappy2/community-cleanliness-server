@@ -27,7 +27,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
     const db = client.db("cleanlinessDB");
     const issuesCollection = db.collection("issues");
     const contributionCollection = db.collection("contributions");
@@ -132,5 +132,9 @@ async function run() {
   }
 }
 
+app.listen(port, () => {
+  console.log("server is running ");
+});
+
 run().catch(console.dir);
-module.exports = app;
+// module.exports = app;
